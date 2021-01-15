@@ -10,5 +10,5 @@ import application
 
 
 if __name__ == "__main__":
-    app = application.Application(800, 800)
+    app = application.Application(1000, 800)
     app.run()

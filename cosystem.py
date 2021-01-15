@@ -45,6 +45,22 @@ class CoordinateSystem:
             print("An error has occurred here is the message:")
             print(message)
 
+    def get_origin(self):
+        """
+        gets origin point of coordinate system
+        :return: [x, y] list of ints
+        """
+        return [self.x_axis.start_pos[0], self.y_axis.start_pos[1]]
+
+    def convert_position(self, x, y):
+        """
+        converts pygame position to coordinate in system
+        :param x: the x position on window
+        :param y: the y position on window
+        :return: coordinates as list [x, y]
+        """
+        pass
+
     def zoom(self, direction):
         """
         zooms in or out of the coordinate system
