@@ -39,6 +39,7 @@ class Application:
             # mouse events
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouse_click_pos = pygame.mouse.get_pos()
+                self.coord_system.set_click_point()
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.mouse_click_pos = False
             elif event.type == pygame.MOUSEMOTION:

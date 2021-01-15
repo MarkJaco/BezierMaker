@@ -31,14 +31,22 @@ class CoordinateSystem:
         makes x axis with correct position
         :return: axis.Axis object
         """
-        return axis.Axis((self.x, self.y + (self.height / 2)), (self.x + self.width, self.y + (self.height / 2)))
+        return axis.Axis([self.x, self.y + (self.height / 2)], [self.x + self.width, self.y + (self.height / 2)])
 
     def create_y_axis(self):
         """
         makes y axis with correct position
         :return: axis.Axis object
         """
-        return axis.Axis((self.x + (self.width / 2), self.y), (self.x + (self.width / 2), self.y + self.height))
+        return axis.Axis([self.x + (self.width / 2), self.y], [self.x + (self.width / 2), self.y + self.height])
+
+    def set_click_point(self):
+        """
+        save the points when mouse is dragged for future reference
+        :return: None
+        """
+        self.x_axis.set_click_point()
+        self.y_axis.set_click_point()
 
     def move(self, mouse_click_pos):
         """
@@ -46,6 +54,11 @@ class CoordinateSystem:
         :param mouse_click_pos: position where the mouse was initially clicked
         :return: None
         """
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        x_difference = mouse_x - mouse_click_pos[0]
+        y_difference = mouse_y - mouse_click_pos[1]
+        self.x_axis.move(x_difference, y_difference)
+        self.y_axis.move(x_difference, y_difference)
 
     def draw(self, screen):
         """
