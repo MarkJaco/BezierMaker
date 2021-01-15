@@ -23,6 +23,8 @@ class CoordinateSystem:
         self.width = width
         self.height = height
         self.outer_border = 5
+        self.axis_extra_width = self.width * 5
+        self.axis_extra_height = self.height * 5
         self.x_axis = self.create_x_axis()
         self.y_axis = self.create_y_axis()
 
@@ -31,14 +33,18 @@ class CoordinateSystem:
         makes x axis with correct position
         :return: axis.Axis object
         """
-        return axis.Axis([self.x, self.y + (self.height / 2)], [self.x + self.width, self.y + (self.height / 2)])
+        start_point = [self.x - self.axis_extra_width, self.y + (self.height / 2)]
+        end_point = [self.x + self.width + self.axis_extra_width, self.y + (self.height / 2)]
+        return axis.Axis(start_point, end_point)
 
     def create_y_axis(self):
         """
         makes y axis with correct position
         :return: axis.Axis object
         """
-        return axis.Axis([self.x + (self.width / 2), self.y], [self.x + (self.width / 2), self.y + self.height])
+        start_point = [self.x + (self.width / 2), self.y - self.axis_extra_height]
+        end_point = [self.x + (self.width / 2), self.y + self.height + self.axis_extra_height]
+        return axis.Axis(start_point, end_point)
 
     def set_click_point(self):
         """
@@ -72,3 +78,5 @@ class CoordinateSystem:
         # main axes
         self.x_axis.draw(screen)
         self.y_axis.draw(screen)
+        # other lines
+        # TODO
