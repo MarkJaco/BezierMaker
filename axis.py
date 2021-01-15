@@ -1,5 +1,5 @@
 """
-module contains the axis class for the x and the y axis
+module contains the line for the axes and the coordinate system lines
 
 creator: Mark Jacobsen
 """
@@ -7,7 +7,7 @@ import pygame
 import helper
 
 
-class Axis:
+class Line:
     def __init__(self, start_pos, end_pos):
         """
         constructor
@@ -19,6 +19,7 @@ class Axis:
         self.axis_width = 3
         self.start_pos_click = [0, 0]
         self.end_pos_click = [0, 0]
+        self.color = helper.colors["grey"]
 
     def set_click_point(self):
         """
@@ -48,4 +49,4 @@ class Axis:
         :param screen: the pygame window to draw on
         :return: None
         """
-        pygame.draw.line(screen, helper.colors["black"], self.start_pos, self.end_pos, self.axis_width)
+        pygame.draw.line(screen, self.color, self.start_pos, self.end_pos, self.axis_width)

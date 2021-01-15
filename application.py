@@ -45,6 +45,8 @@ class Application:
             elif event.type == pygame.MOUSEMOTION:
                 if self.mouse_click_pos:
                     self.coord_system.move(self.mouse_click_pos)
+            elif event.type == pygame.MOUSEWHEEL:
+                self.coord_system.zoom(event.y)
 
     def run(self):
         # main loop
