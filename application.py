@@ -31,35 +31,24 @@ class Application:
         self.selected_button.set_selected(True)
         self.image = image.Image(r"images/saitama.jpg", 0, 0, 500, 500)
 
-    def draw(self):
-        """
-        draw everything on screen
-        :return: None
-        """
-        self.image.draw(self.screen)
-        self.coord_system.draw(self.screen)
-        self.menu.draw(self.screen)
-        # mouse pos text
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        m_x, m_y = self.coord_system.convert_window_position(mouse_x, mouse_y)
-        text_surface = self.font.render(f'x: {round(m_x, 2)}, y:{round(m_y, 2)}', False, helper.colors["dark_grey"])
-        text_pos = (self.window_width - self.window_width / 6, self.window_height - self.window_height / 17)
-        self.screen.blit(text_surface, text_pos)
-
     def handle_mouse_down(self):
         """
         handles mouse button down event
         :return: None
         """
         self.mouse_click_pos = pygame.mouse.get_pos()
-        # image managing
-        if self.image:
-            if self.image.on_image(self.mouse_click_pos[0], self.mouse_click_pos[1]):
-                self.moving_image = self.image
-                self.moving_image.set_click_position()
         # buttons
         if self.selected_button:
             self.moving_point = self.coord_system.handle_click(self.selected_button.functionality)
+        # image managing
+        if self.image:
+            # move image alone
+            if self.image.on_image(self.mouse_click_pos[0], self.mouse_click_pos[1]):
+                self.moving_image = self.image
+                self.moving_image.set_click_position()
+            # move image along
+            if not self.moving_point:
+                self.image.set_click_position()
 
     def handle_mouse_up(self, event):
         """
@@ -103,6 +92,7 @@ class Application:
             self.moving_image.move(self.mouse_click_pos)
         elif self.mouse_click_pos and not self.moving_point:
             self.coord_system.move(self.mouse_click_pos)
+            self.image.move(self.mouse_click_pos)
 
     def handle_events(self):
         """
@@ -123,6 +113,22 @@ class Application:
                 self.handle_mouse_motion(event)
             elif event.type == pygame.MOUSEWHEEL:
                 self.coord_system.zoom(event.y)
+                self.image.zoom(event.y)
+
+    def draw(self):
+        """
+        draw everything on screen
+        :return: None
+        """
+        self.image.draw(self.screen)
+        self.coord_system.draw(self.screen)
+        self.menu.draw(self.screen)
+        # mouse pos text
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        m_x, m_y = self.coord_system.convert_window_position(mouse_x, mouse_y)
+        text_surface = self.font.render(f'x: {round(m_x, 2)}, y:{round(m_y, 2)}', False, helper.colors["dark_grey"])
+        text_pos = (self.window_width - self.window_width / 6, self.window_height - self.window_height / 17)
+        self.screen.blit(text_surface, text_pos)
 
     def run(self):
         # main loop

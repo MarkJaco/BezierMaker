@@ -55,7 +55,7 @@ class BezierCurve:
         for curve_points in self.anchor_points:
             # check if enough points
             if len(curve_points) < 3:
-                return
+                continue
             # create curve
             n = len(curve_points) - 1
             for t in range(0, self.num_steps, 1):
