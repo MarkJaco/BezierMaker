@@ -9,6 +9,7 @@ import cosystem
 import helper
 import menu
 import image
+import wx
 
 
 class Application:
@@ -29,7 +30,7 @@ class Application:
         self.menu = menu.Menu(0, 0, int(self.window_width / 10), self.window_height)
         self.selected_button = self.menu.buttons[0]
         self.selected_button.set_selected(True)
-        self.image = image.Image(r"images/saitama.jpg", 0, 0, 500, 500)
+        self.image = None
 
     def handle_mouse_down(self):
         """
@@ -65,6 +66,9 @@ class Application:
                 # special case exporting
                 if selected_button.functionality == "export":
                     self.coord_system.bezier_curve.export()
+                # special case uploading
+                elif selected_button.functionality == "upload":
+                    self.get_image(".*jpg")
                 # other buttons
                 elif not self.selected_button or not selected_button == self.selected_button:
                     if self.selected_button:
@@ -96,7 +100,25 @@ class Application:
             self.moving_image.move(self.mouse_click_pos)
         elif self.mouse_click_pos and not self.moving_point:
             self.coord_system.move(self.mouse_click_pos)
-            self.image.move(self.mouse_click_pos)
+            if self.image:
+                self.image.move(self.mouse_click_pos)
+
+    def get_image(self, wild_card):
+        """
+        gets image from user selection
+        converts path to pygame image
+        :param wild_card: the wild_card extension
+        :return: None
+        """
+        app = wx.App(None)
+        style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
+        dialog = wx.FileDialog(None, 'Open', wildcard=wild_card, style=style)
+        if dialog.ShowModal() == wx.ID_OK:
+            path = dialog.GetPath()
+        else:
+            path = None
+        dialog.Destroy()
+        self.image = image.Image(path, 0, 0, 200, 200)
 
     def handle_events(self):
         """
@@ -124,7 +146,8 @@ class Application:
         draw everything on screen
         :return: None
         """
-        self.image.draw(self.screen)
+        if self.image:
+            self.image.draw(self.screen)
         self.coord_system.draw(self.screen)
         self.menu.draw(self.screen)
         # mouse pos text

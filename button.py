@@ -133,3 +133,29 @@ class ExportButton(Button):
         start_point = (self.x + self.width / 2, self.y + self.height / 2)
         end_point = (self.x + self.width / 2, self.y + self.height - self.height / 5)
         pygame.draw.line(screen, self.arrow_color, start_point, end_point, 10)
+
+
+class UploadButton(Button):
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
+        self.image_color = helper.colors["black"]
+        self.functionality = "upload"
+
+    def draw(self, screen):
+        """
+        draw the button onto the window
+        with additional image icon
+        :param screen: the window to draw on
+        :return: None
+        """
+        # draw rect
+        super(UploadButton, self).draw(screen)
+        # image icon
+        points = ((self.x + self.width / 10, self.y + self.height - self.height / 10),
+                  (self.x + self.width / 5, self.y + self.height / 2),
+                  (self.x + self.width / 2, self.y + self.height - self.height / 7),
+                  (self.x + self.width - self.width / 5, self.y + self.height - self.height / 4),
+                  (self.x + self.width - self.width / 10, self.y + self.height - self.height / 10))
+        pygame.draw.polygon(screen, self.image_color, points)
+        center_point = (self.x + self.width * 0.8, self.y + self.height * 0.2)
+        pygame.draw.circle(screen, self.image_color, center_point, self.width / 10)
