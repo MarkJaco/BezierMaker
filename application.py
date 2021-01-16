@@ -62,7 +62,11 @@ class Application:
             # buttons
             selected_button = self.menu.handle_click(current_pos)
             if selected_button:
-                if not self.selected_button or not selected_button == self.selected_button:
+                # special case exporting
+                if selected_button.functionality == "export":
+                    self.coord_system.bezier_curve.export()
+                # other buttons
+                elif not self.selected_button or not selected_button == self.selected_button:
                     if self.selected_button:
                         self.selected_button.set_selected(False)
                     selected_button.set_selected(True)

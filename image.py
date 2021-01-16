@@ -26,10 +26,8 @@ class Image:
         :param direction: 1 for in -1 for out
         :return: None
         """
-        print(f"before: {self.width}, {self.height}")
         self.width += direction * self.zoom_amount
         self.height += direction * self.zoom_amount
-        print(f"after: {self.width}, {self.height}")
         self.image = pygame.image.load(self.image_path)
         self.image = pygame.transform.scale(self.image, (self.width, self.height))
 

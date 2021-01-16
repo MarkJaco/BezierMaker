@@ -17,6 +17,9 @@ class Point:
         self.radius = 5
         self.color = helper.colors["red"]
 
+    def __repr__(self):
+        return f"({self.x}, {self.y})"
+
     def on_point(self, x, y, origin, line_distance):
         """
         checks if given position is on the point

@@ -14,6 +14,22 @@ class BezierCurve:
         self.num_steps = 1000
         self.draw_points = []
 
+    def export(self):
+        """
+        exports the anchor points
+        meaning it prints them in the console
+        :return: None
+        """
+        export_str = ""
+        for c, curve in enumerate(self.anchor_points):
+            export_str += "bezierKurve" + str(c) + " = {"
+            for i, p in enumerate(curve):
+                export_str += "{" + str(p.x) + ", " + str(p.y) + "}"
+                if not i == len(curve) - 1:
+                    export_str += ", "
+            export_str += "}\n"
+        print(export_str)
+
     def add_anchor_point(self, anchor_point):
         """
         adds anchor point to the curve
@@ -79,4 +95,3 @@ class BezierCurve:
         """
         for draw_point in self.draw_points:
             draw_point.draw(screen, origin, line_distance)
-
