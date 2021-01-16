@@ -41,6 +41,10 @@ class Application:
                 self.mouse_click_pos = pygame.mouse.get_pos()
                 self.coord_system.set_click_point()
             elif event.type == pygame.MOUSEBUTTONUP:
+                current_pos = pygame.mouse.get_pos()
+                # add new point
+                if current_pos == self.mouse_click_pos and event.button == 1:
+                    self.coord_system.add_point(current_pos[0], current_pos[1])
                 self.mouse_click_pos = False
             elif event.type == pygame.MOUSEMOTION:
                 if self.mouse_click_pos:

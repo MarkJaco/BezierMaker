@@ -49,6 +49,28 @@ class CoordinateSystem:
             print("An error has occurred here is the message:")
             print(message)
 
+    def convert_window_position(self, x, y):
+        """
+        convert window position to mathematical position
+        :param x: the window x pos
+        :param y: the window y pos
+        :return: [x, y] as mathematical positions
+        """
+        x_coord = (x - self.origin[0]) / self.line_distance
+        y_coord = -((y - self.origin[1]) / self.line_distance)
+        return x_coord, y_coord
+
+    def add_point(self, x, y):
+        """
+        add point to the coordinate system
+        :param x: the window x position
+        :param y: the window y position
+        :return: None
+        """
+        x_coord, y_coord = self.convert_window_position(x, y)
+        new_point = point.Point(x_coord, y_coord)
+        self.points.append(new_point)
+
     def create_x_axis(self):
         """
         makes x axis with correct position
