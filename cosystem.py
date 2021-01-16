@@ -8,6 +8,7 @@ import pygame
 import axis
 import point
 import helper
+import bezier_curve
 
 
 class CoordinateSystem:
@@ -34,10 +35,11 @@ class CoordinateSystem:
         self.y_axis = self.create_y_axis()
         self.horizontal_lines = self.get_horizontal_lines()
         self.vertical_lines = self.get_vertical_lines()
-        self.points = [point.Point(1, 1)]
+        self.points = []
         self.origin = [self.x + (self.width / 2), self.y + (self.height / 2)]
         self.origin_click_point = []
         self.print_errors = False
+        self.bezier_curve = bezier_curve.BezierCurve()
 
     def __error(self, message):
         """
@@ -70,6 +72,8 @@ class CoordinateSystem:
         x_coord, y_coord = self.convert_window_position(x, y)
         new_point = point.Point(x_coord, y_coord)
         self.points.append(new_point)
+        self.bezier_curve.anchor_points.append(new_point)
+        self.bezier_curve.create_curve()
 
     def create_x_axis(self):
         """
@@ -205,4 +209,6 @@ class CoordinateSystem:
         # points
         for p in self.points:
             p.draw(screen, self.origin, self.line_distance)
+        # curve
+        self.bezier_curve.draw(screen, self.origin, self.line_distance)
 
