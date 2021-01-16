@@ -24,7 +24,7 @@ class BezierCurve:
         for c, curve in enumerate(self.anchor_points):
             export_str += "bezierKurve" + str(c) + " = {"
             for i, p in enumerate(curve):
-                export_str += "{" + str(p.x) + ", " + str(p.y) + "}"
+                export_str += "{" + str(round(p.x, 3)) + ", " + str(round(p.y, 3)) + "}"
                 if not i == len(curve) - 1:
                     export_str += ", "
             export_str += "}\n"

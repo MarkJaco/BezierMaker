@@ -45,10 +45,14 @@ class Application:
         if self.image:
             # move image alone
             if self.image.on_image(self.mouse_click_pos[0], self.mouse_click_pos[1]):
-                self.moving_image = self.image
-                self.moving_image.set_click_position()
+                if self.selected_button and self.selected_button.functionality == "delete":
+                    self.image = None
+                    self.moving_image = None
+                else:
+                    self.moving_image = self.image
+                    self.moving_image.set_click_position()
             # move image along
-            if not self.moving_point:
+            if not self.moving_point and self.image:
                 self.image.set_click_position()
 
     def handle_mouse_up(self, event):
@@ -139,7 +143,8 @@ class Application:
                 self.handle_mouse_motion(event)
             elif event.type == pygame.MOUSEWHEEL:
                 self.coord_system.zoom(event.y)
-                self.image.zoom(event.y)
+                if self.image:
+                    self.image.zoom(event.y)
 
     def draw(self):
         """

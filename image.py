@@ -19,6 +19,8 @@ class Image:
         self.click_x = 0
         self.click_y = 0
         self.zoom_amount = 100
+        self.min_zoom = 20
+        self.max_zoom = 300
 
     def zoom(self, direction):
         """
@@ -26,6 +28,10 @@ class Image:
         :param direction: 1 for in -1 for out
         :return: None
         """
+        if not self.min_zoom <= self.width + direction * self.zoom_amount <= self.max_zoom:
+            return
+        if not self.min_zoom <= self.height + direction * self.zoom_amount <= self.max_zoom:
+            return
         self.width += direction * self.zoom_amount
         self.height += direction * self.zoom_amount
         self.image = pygame.image.load(self.image_path)
