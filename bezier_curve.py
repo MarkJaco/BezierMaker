@@ -11,7 +11,6 @@ import helper
 class BezierCurve:
     def __init__(self):
         self.anchor_points = []
-        self.color = helper.colors["blue"]
         self.num_steps = 1000
         self.draw_points = []
 
@@ -21,7 +20,17 @@ class BezierCurve:
         :param anchor_point: the point to add point.Point object
         :return: None
         """
-        self.anchor_points.append(anchor_point)
+        if not self.anchor_points:
+            self.anchor_points.append([anchor_point])
+        else:
+            found = False
+            for curve in self.anchor_points:
+                if curve:
+                    if anchor_point.color == curve[0].color:
+                        curve.append(anchor_point)
+                        found = True
+            if not found:
+                self.anchor_points.append([anchor_point])
         self.create_curve()
 
     def remove_anchor_point(self, anchor_point):
@@ -30,7 +39,10 @@ class BezierCurve:
         :param anchor_point: the point to remove from list
         :return: None
         """
-        self.anchor_points.remove(anchor_point)
+        for curve in self.anchor_points:
+            if curve:
+                if curve[0].color == anchor_point.color:
+                    curve.remove(anchor_point)
         self.create_curve()
 
     def create_curve(self):
@@ -38,23 +50,24 @@ class BezierCurve:
         creates the bezier curve
         :return: None
         """
-        # check if enough points
-        if len(self.anchor_points) < 3:
-            return
         # clear previous points
         self.draw_points = []
-        # create curve
-        n = len(self.anchor_points) - 1
-        for t in range(0, self.num_steps, 1):
-            t = t / self.num_steps
-            draw_point_x = 0
-            draw_point_y = 0
-            for i, anchor_point in enumerate(self.anchor_points):
-                draw_point_x += helper.binomial(n, i) * pow(t, i) * pow(1 - t, n - i) * anchor_point.x
-                draw_point_y += helper.binomial(n, i) * pow(t, i) * pow(1 - t, n - i) * anchor_point.y
-            new_point = point.Point(draw_point_x, draw_point_y)
-            new_point.color = self.color
-            self.draw_points.append(new_point)
+        for curve_points in self.anchor_points:
+            # check if enough points
+            if len(curve_points) < 3:
+                return
+            # create curve
+            n = len(curve_points) - 1
+            for t in range(0, self.num_steps, 1):
+                t = t / self.num_steps
+                draw_point_x = 0
+                draw_point_y = 0
+                for i, anchor_point in enumerate(curve_points):
+                    draw_point_x += helper.binomial(n, i) * pow(t, i) * pow(1 - t, n - i) * anchor_point.x
+                    draw_point_y += helper.binomial(n, i) * pow(t, i) * pow(1 - t, n - i) * anchor_point.y
+                new_point = point.Point(draw_point_x, draw_point_y)
+                new_point.color = curve_points[0].color
+                self.draw_points.append(new_point)
 
     def draw(self, screen, origin, line_distance):
         """
@@ -64,8 +77,6 @@ class BezierCurve:
         :param line_distance: the current zoom level
         :return: None
         """
-        if len(self.anchor_points) < 3:
-            return
         for draw_point in self.draw_points:
             draw_point.draw(screen, origin, line_distance)
 
