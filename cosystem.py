@@ -62,6 +62,19 @@ class CoordinateSystem:
         y_coord = -((y - self.origin[1]) / self.line_distance)
         return x_coord, y_coord
 
+    def move_point(self, p, x, y):
+        """
+        moves given point to given window coordinates
+        :param p: the point to move point.Point object
+        :param x: the window x coordinate
+        :param y: the window y coordinate
+        :return: None
+        """
+        new_x, new_y = self.convert_window_position(x, y)
+        p.x = new_x
+        p.y = new_y
+        self.bezier_curve.create_curve()
+
     def add_point(self, x, y):
         """
         add point to the coordinate system
@@ -155,6 +168,19 @@ class CoordinateSystem:
             self.line_distance -= self.zoom_amount
         self.horizontal_lines = self.get_horizontal_lines()
         self.vertical_lines = self.get_vertical_lines()
+
+    def handle_click(self):
+        """
+        handles mouse button down event
+        :return: None
+        """
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        # check if on any points
+        for p in self.points:
+            if p.on_point(mouse_x, mouse_y, self.origin, self.line_distance):
+                return p
+        # no points clicked
+        self.set_click_point()
 
     def set_click_point(self):
         """

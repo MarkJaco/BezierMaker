@@ -5,6 +5,7 @@ they can be moved around and placed with the mouse
 
 creator: Mark Jacobsen
 """
+import math
 import pygame
 import helper
 
@@ -15,6 +16,22 @@ class Point:
         self.y = y
         self.radius = 5
         self.color = helper.colors["red"]
+
+    def on_point(self, x, y, origin, line_distance):
+        """
+        checks if given position is on the point
+        :param x: the window position x
+        :param y: the window position y
+        :param origin: the origin point of the coordinate system
+        :param line_distance: the current zoom level
+        :return: boolean accordingly
+        """
+        middle_point = self.convert_coordinates(origin, line_distance)
+        subtract_point = [middle_point[0] - x, middle_point[1] - y]
+        distance = math.sqrt(pow(subtract_point[0], 2) + pow(subtract_point[1], 2))
+        if distance <= self.radius:
+            return True
+        return False
 
     def convert_coordinates(self, origin, line_distance):
         """

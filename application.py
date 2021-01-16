@@ -18,6 +18,7 @@ class Application:
         self.finished = False
         self.coord_system = cosystem.CoordinateSystem(0, 0, self.window_width, self.window_height)
         self.mouse_click_pos = False
+        self.moving_point = None
 
     def draw(self):
         """
@@ -39,15 +40,19 @@ class Application:
             # mouse events
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.mouse_click_pos = pygame.mouse.get_pos()
-                self.coord_system.set_click_point()
+                self.moving_point = self.coord_system.handle_click()
             elif event.type == pygame.MOUSEBUTTONUP:
                 current_pos = pygame.mouse.get_pos()
                 # add new point
-                if current_pos == self.mouse_click_pos and event.button == 1:
+                if current_pos == self.mouse_click_pos and event.button == 1 and not self.moving_point:
                     self.coord_system.add_point(current_pos[0], current_pos[1])
                 self.mouse_click_pos = False
+                self.moving_point = None
             elif event.type == pygame.MOUSEMOTION:
-                if self.mouse_click_pos:
+                current_pos = pygame.mouse.get_pos()
+                if self.moving_point:
+                    self.coord_system.move_point(self.moving_point, current_pos[0], current_pos[1])
+                if self.mouse_click_pos and not self.moving_point:
                     self.coord_system.move(self.mouse_click_pos)
             elif event.type == pygame.MOUSEWHEEL:
                 self.coord_system.zoom(event.y)
