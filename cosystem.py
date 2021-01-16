@@ -6,6 +6,7 @@ creator: Mark Jacobsen
 """
 import pygame
 import axis
+import point
 import helper
 
 
@@ -33,6 +34,9 @@ class CoordinateSystem:
         self.y_axis = self.create_y_axis()
         self.horizontal_lines = self.get_horizontal_lines()
         self.vertical_lines = self.get_vertical_lines()
+        self.points = [point.Point(1, 1)]
+        self.origin = [self.x + (self.width / 2), self.y + (self.height / 2)]
+        self.origin_click_point = []
         self.print_errors = False
 
     def __error(self, message):
@@ -44,39 +48,6 @@ class CoordinateSystem:
         if self.print_errors:
             print("An error has occurred here is the message:")
             print(message)
-
-    def get_origin(self):
-        """
-        gets origin point of coordinate system
-        :return: [x, y] list of ints
-        """
-        return [self.x_axis.start_pos[0], self.y_axis.start_pos[1]]
-
-    def convert_position(self, x, y):
-        """
-        converts pygame position to coordinate in system
-        :param x: the x position on window
-        :param y: the y position on window
-        :return: coordinates as list [x, y]
-        """
-        pass
-
-    def zoom(self, direction):
-        """
-        zooms in or out of the coordinate system
-        :param direction: 1 for in -1 for out
-        :return: None
-        """
-        if direction == 1:
-            if self.line_distance + self.zoom_amount > self.max_zoom:
-                return
-            self.line_distance += self.zoom_amount
-        elif direction == -1:
-            if self.line_distance - self.zoom_amount < self.min_zoom:
-                return
-            self.line_distance -= self.zoom_amount
-        self.horizontal_lines = self.get_horizontal_lines()
-        self.vertical_lines = self.get_vertical_lines()
 
     def create_x_axis(self):
         """
@@ -142,11 +113,29 @@ class CoordinateSystem:
             vertical_lines.append(line)
         return vertical_lines
 
+    def zoom(self, direction):
+        """
+        zooms in or out of the coordinate system
+        :param direction: 1 for in -1 for out
+        :return: None
+        """
+        if direction == 1:
+            if self.line_distance + self.zoom_amount > self.max_zoom:
+                return
+            self.line_distance += self.zoom_amount
+        elif direction == -1:
+            if self.line_distance - self.zoom_amount < self.min_zoom:
+                return
+            self.line_distance -= self.zoom_amount
+        self.horizontal_lines = self.get_horizontal_lines()
+        self.vertical_lines = self.get_vertical_lines()
+
     def set_click_point(self):
         """
         save the points when mouse is dragged for future reference
         :return: None
         """
+        self.origin_click_point = self.origin[:]
         self.x_axis.set_click_point()
         self.y_axis.set_click_point()
         for h_line in self.horizontal_lines:
@@ -170,6 +159,9 @@ class CoordinateSystem:
             h_line.move(x_difference, y_difference)
         for v_line in self.vertical_lines:
             v_line.move(x_difference, y_difference)
+        # move origin
+        self.origin[0] = self.origin_click_point[0] + x_difference
+        self.origin[1] = self.origin_click_point[1] + y_difference
 
     def draw(self, screen):
         """
@@ -188,4 +180,7 @@ class CoordinateSystem:
             h_line.draw(screen)
         for v_line in self.vertical_lines:
             v_line.draw(screen)
+        # points
+        for p in self.points:
+            p.draw(screen, self.origin, self.line_distance)
 
