@@ -7,6 +7,7 @@ creator: Mark Jacobsen
 import pygame
 import cosystem
 import helper
+import menu
 
 
 class Application:
@@ -19,13 +20,52 @@ class Application:
         self.coord_system = cosystem.CoordinateSystem(0, 0, self.window_width, self.window_height)
         self.mouse_click_pos = False
         self.moving_point = None
+        self.image = pygame.image.load(r'images/saitama.jpg')
+        self.menu = menu.Menu(0, 0, int(self.window_width / 10), self.window_height)
+        self.selected_button = None
 
     def draw(self):
         """
         draw everything on screen
         :return: None
         """
+        # self.screen.blit(self.image, (100, 100))
         self.coord_system.draw(self.screen)
+        self.menu.draw(self.screen)
+
+    def handle_mouse_down(self):
+        """
+        handles mouse button down event
+        :return: None
+        """
+        self.mouse_click_pos = pygame.mouse.get_pos()
+        self.moving_point = self.coord_system.handle_click()
+
+    def handle_mouse_up(self, event):
+        """
+        handle mouse button up event
+        :param event: the exact pygame event that occurred
+        :return:
+        """
+        current_pos = pygame.mouse.get_pos()
+        # add new point
+        if current_pos == self.mouse_click_pos and event.button == 1:
+            selected_button = self.menu.handle_click(current_pos)
+            if selected_button:
+                if not self.selected_button or not selected_button == self.selected_button:
+                    if self.selected_button:
+                        self.selected_button.set_selected(False)
+                    selected_button.set_selected(True)
+                    self.selected_button = selected_button
+                else:
+                    selected_button.set_selected(False)
+                    self.selected_button = None
+
+            # add point
+            if not self.moving_point and not selected_button:
+                self.coord_system.add_point(current_pos[0], current_pos[1])
+        self.mouse_click_pos = False
+        self.moving_point = None
 
     def handle_events(self):
         """
@@ -39,15 +79,9 @@ class Application:
                 self.finished = True
             # mouse events
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.mouse_click_pos = pygame.mouse.get_pos()
-                self.moving_point = self.coord_system.handle_click()
+                self.handle_mouse_down()
             elif event.type == pygame.MOUSEBUTTONUP:
-                current_pos = pygame.mouse.get_pos()
-                # add new point
-                if current_pos == self.mouse_click_pos and event.button == 1 and not self.moving_point:
-                    self.coord_system.add_point(current_pos[0], current_pos[1])
-                self.mouse_click_pos = False
-                self.moving_point = None
+                self.handle_mouse_up(event)
             elif event.type == pygame.MOUSEMOTION:
                 current_pos = pygame.mouse.get_pos()
                 if self.moving_point:
