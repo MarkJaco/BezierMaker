@@ -72,7 +72,7 @@ class CoordinateSystem:
         x_coord, y_coord = self.convert_window_position(x, y)
         new_point = point.Point(x_coord, y_coord)
         self.points.append(new_point)
-        self.bezier_curve.anchor_points.append(new_point)
+        self.bezier_curve.add_anchor_point(new_point)
         self.bezier_curve.create_curve()
 
     def create_x_axis(self):

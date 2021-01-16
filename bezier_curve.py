@@ -12,7 +12,7 @@ class BezierCurve:
     def __init__(self):
         self.anchor_points = []
         self.color = helper.colors["blue"]
-        self.num_steps = 100
+        self.num_steps = 1000
         self.draw_points = []
 
     def add_anchor_point(self, anchor_point):
@@ -21,7 +21,7 @@ class BezierCurve:
         :param anchor_point: the point to add point.Point object
         :return: None
         """
-        self.anchor_points.append(point)
+        self.anchor_points.append(anchor_point)
 
     def create_curve(self):
         """
