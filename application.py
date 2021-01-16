@@ -22,7 +22,8 @@ class Application:
         self.moving_point = None
         self.image = pygame.image.load(r'images/saitama.jpg')
         self.menu = menu.Menu(0, 0, int(self.window_width / 10), self.window_height)
-        self.selected_button = None
+        self.selected_button = self.menu.buttons[0]
+        self.selected_button.set_selected(True)
 
     def draw(self):
         """
@@ -39,7 +40,8 @@ class Application:
         :return: None
         """
         self.mouse_click_pos = pygame.mouse.get_pos()
-        self.moving_point = self.coord_system.handle_click()
+        if self.selected_button:
+            self.moving_point = self.coord_system.handle_click(self.selected_button.functionality)
 
     def handle_mouse_up(self, event):
         """
@@ -50,6 +52,7 @@ class Application:
         current_pos = pygame.mouse.get_pos()
         # add new point
         if current_pos == self.mouse_click_pos and event.button == 1:
+            # buttons
             selected_button = self.menu.handle_click(current_pos)
             if selected_button:
                 if not self.selected_button or not selected_button == self.selected_button:
@@ -62,8 +65,9 @@ class Application:
                     self.selected_button = None
 
             # add point
-            if not self.moving_point and not selected_button:
-                self.coord_system.add_point(current_pos[0], current_pos[1])
+            if not self.moving_point and not selected_button and self.selected_button:
+                if self.selected_button.functionality == "add_point":
+                    self.coord_system.add_point(current_pos[0], current_pos[1], self.selected_button.ball_color)
         self.mouse_click_pos = False
         self.moving_point = None
 

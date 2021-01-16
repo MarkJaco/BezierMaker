@@ -17,6 +17,7 @@ class Button:
         self.color = helper.colors["grey"]
         self.selected = False
         self.thick = 3
+        self.functionality = "None"
 
     def on_button(self, x, y):
         """
@@ -61,6 +62,7 @@ class PointButton(Button):
         super().__init__(x, y, width, height)
         self.radius = 10
         self.ball_color = helper.colors["red"]
+        self.functionality = "add_point"
 
     def set_ball_color(self, color):
         """
@@ -88,6 +90,7 @@ class DeleteButton(Button):
         super().__init__(x, y, width, height)
         self.cross_color = helper.colors["red"]
         self.cross_width = 5
+        self.functionality = "delete"
 
     def draw(self, screen):
         """
@@ -111,6 +114,7 @@ class ExportButton(Button):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
         self.arrow_color = helper.colors["black"]
+        self.functionality = "export"
 
     def draw(self, screen):
         """

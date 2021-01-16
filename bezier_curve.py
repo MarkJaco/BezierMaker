@@ -22,6 +22,16 @@ class BezierCurve:
         :return: None
         """
         self.anchor_points.append(anchor_point)
+        self.create_curve()
+
+    def remove_anchor_point(self, anchor_point):
+        """
+        remove given anchor point
+        :param anchor_point: the point to remove from list
+        :return: None
+        """
+        self.anchor_points.remove(anchor_point)
+        self.create_curve()
 
     def create_curve(self):
         """

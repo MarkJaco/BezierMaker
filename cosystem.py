@@ -75,18 +75,20 @@ class CoordinateSystem:
         p.y = new_y
         self.bezier_curve.create_curve()
 
-    def add_point(self, x, y):
+    def add_point(self, x, y, color=None):
         """
         add point to the coordinate system
         :param x: the window x position
         :param y: the window y position
+        :param color: optional, which color should the point have
         :return: None
         """
         x_coord, y_coord = self.convert_window_position(x, y)
         new_point = point.Point(x_coord, y_coord)
+        if color:
+            new_point.color = color
         self.points.append(new_point)
         self.bezier_curve.add_anchor_point(new_point)
-        self.bezier_curve.create_curve()
 
     def create_x_axis(self):
         """
@@ -169,15 +171,20 @@ class CoordinateSystem:
         self.horizontal_lines = self.get_horizontal_lines()
         self.vertical_lines = self.get_vertical_lines()
 
-    def handle_click(self):
+    def handle_click(self, functionality):
         """
         handles mouse button down event
+        :param functionality: the current button functionality
         :return: None
         """
         mouse_x, mouse_y = pygame.mouse.get_pos()
         # check if on any points
         for p in self.points:
             if p.on_point(mouse_x, mouse_y, self.origin, self.line_distance):
+                if functionality == "delete":
+                    self.points.remove(p)
+                    self.bezier_curve.remove_anchor_point(p)
+                    p = None
                 return p
         # no points clicked
         self.set_click_point()
