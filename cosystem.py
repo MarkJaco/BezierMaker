@@ -30,7 +30,7 @@ class CoordinateSystem:
         self.line_distance = 100
         self.zoom_amount = 10
         self.max_zoom = 300
-        self.min_zoom = 20
+        self.min_zoom = 5
         self.x_axis = self.create_x_axis()
         self.y_axis = self.create_y_axis()
         self.horizontal_lines = self.get_horizontal_lines()

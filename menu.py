@@ -30,7 +30,7 @@ class Menu:
         creates the necessary buttons for the menu
         :return: list of button.Button objects
         """
-        needed_buttons = 8
+        needed_buttons = 12
         additional_y = int(self.height / needed_buttons)
         button1 = button.PointButton(0, 0, self.width, additional_y)
         button2 = button.PointButton(0, additional_y, self.width, additional_y)
@@ -41,10 +41,19 @@ class Menu:
         button4.set_ball_color(helper.colors["orange"])
         button5 = button.PointButton(0, additional_y * 4, self.width, additional_y)
         button5.set_ball_color(helper.colors["blue"])
-        button6 = button.DeleteButton(0, additional_y * 5, self.width, additional_y)
-        button7 = button.UploadButton(0, additional_y * 6, self.width, additional_y)
-        button8 = button.ExportButton(0, additional_y * 7, self.width, additional_y)
-        return [button1, button2, button3, button4, button5, button6, button7, button8]
+        button6 = button.PointButton(0, additional_y * 5, self.width, additional_y)
+        button6.set_ball_color(helper.colors["black"])
+        button7 = button.PointButton(0, additional_y * 6, self.width, additional_y)
+        button7.set_ball_color(helper.colors["aquamarine"])
+        button8 = button.PointButton(0, additional_y * 7, self.width, additional_y)
+        button8.set_ball_color(helper.colors["light_blue"])
+        button9 = button.PointButton(0, additional_y * 8, self.width, additional_y)
+        button9.set_ball_color(helper.colors["light_green"])
+        button10 = button.DeleteButton(0, additional_y * 9, self.width, additional_y)
+        button11 = button.UploadButton(0, additional_y * 10, self.width, additional_y)
+        button12 = button.ExportButton(0, additional_y * 11, self.width, additional_y)
+        return [button1, button2, button3, button4, button5, button6, button7, button8, button9, button10, button11,
+                button12]
 
     def handle_click(self, mouse_pos):
         """

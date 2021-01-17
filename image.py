@@ -8,14 +8,18 @@ import pygame
 
 
 class Image:
-    def __init__(self, image_path, x, y, width, height):
+    def __init__(self, image_path, x, y, width=None, height=None):
         self.image_path = image_path
         self.image = pygame.image.load(image_path)
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        if width or height:
+            self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        else:
+            self.width = self.image.get_width()
+            self.height = self.image.get_height()
         self.click_x = 0
         self.click_y = 0
         self.zoom_amount = 100

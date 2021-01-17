@@ -122,7 +122,7 @@ class Application:
         else:
             path = None
         dialog.Destroy()
-        self.image = image.Image(path, 0, 0, 200, 200)
+        self.image = image.Image(path, 0, 0)
 
     def handle_events(self):
         """

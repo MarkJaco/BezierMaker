@@ -11,7 +11,7 @@ import helper
 class BezierCurve:
     def __init__(self):
         self.anchor_points = []
-        self.num_steps = 1000
+        self.num_steps = 100
         self.draw_points = []
 
     def export(self):
@@ -22,12 +22,13 @@ class BezierCurve:
         """
         export_str = ""
         for c, curve in enumerate(self.anchor_points):
-            export_str += "bezierKurve" + str(c) + " = {"
+            export_str += "double bezierKurve" + str(c) + "[][2] = {"
             for i, p in enumerate(curve):
-                export_str += "{" + str(round(p.x, 3)) + ", " + str(round(p.y, 3)) + "}"
+                export_str += "{" + str(round(p.x, 5)) + ", " + str(round(p.y, 5)) + "}"
                 if not i == len(curve) - 1:
                     export_str += ", "
-            export_str += "}\n"
+            export_str += "};\n"
+            export_str += "bezierKurve(bezierKurve" + str(c) + ", " + str(len(curve)) + ");\n"
         print(export_str)
 
     def add_anchor_point(self, anchor_point):
